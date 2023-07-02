@@ -1,53 +1,159 @@
 import random
 
-# List of players
-players = []
 
-# Function to add players
-def add_player(name):
-    players.append(name)
 
-# Function to remove players
-def remove_player(name):
-    players.remove(name)
+# Step 1: Initialize positions of potential solutions
 
-# Function to randomly select a player as the winner
-def select_winner():
-    if len(players) > 0:
-        winner = random.choice(players)
-        print(f"The winner is {winner}!")
-    else:
-        print("No players remaining.")
+def initialize_positions(num_players):
 
-# Main game loop
-while True:
-    print("Squid Game")
-    print("1. Add Player")
-    print("2. Remove Player")
-    print("3. Select Winner")
-    print("4. Quit")
-    choice = input("Enter your choice: ")
+    positions = []
 
-    if choice == "1":
-        name = input("Enter player name: ")
-        add_player(name)
-        print(f"Player {name} added.")
+    for _ in range(num_players):
 
-    elif choice == "2":
-        name = input("Enter player name: ")
-        if name in players:
-            remove_player(name)
-            print(f"Player {name} removed.")
-        else:
-            print(f"Player {name} not found.")
+        position = random.uniform(-1, 1)  # Assuming search space is between -1 and 1
 
-    elif choice == "3":
-        select_winner()
+        positions.append(position)
 
-    elif choice == "4":
-        break
+    return positions
 
-    else:
-        print("Invalid choice. Please try again.")
 
-print("Thanks for playing Squid Game!")
+
+# Step 3: Move offensive players towards defensive players
+
+def move_offensive_players(offensive_players, defensive_players):
+
+    for i in range(len(offensive_players)):
+
+        offensive_players[i] += random.uniform(-1, 1) * (defensive_players[i] - offensive_players[i])
+
+
+
+# Step 4: Evaluate fitness values for players
+
+def evaluate_fitness(offensive_players, defensive_players):
+
+    fitness_values = []
+
+    for i in range(len(offensive_players)):
+
+        fitness_value = calculate_fitness(offensive_players[i], defensive_players[i])
+
+        fitness_values.append(fitness_value)
+
+    return fitness_values
+
+
+
+# Step 5: Join successful offensive players to the Successful Offensive Group (SOG)
+
+def join_successful_offensive_players(offensive_players, defensive_players, offensive_group):
+
+    for i in range(len(offensive_players)):
+
+        if offensive_players[i] > defensive_players[i]:
+
+            offensive_group.append(offensive_players[i])
+
+
+
+# Step 6: Join successful defensive players to the Successful Defensive Group (SDG)
+
+def join_successful_defensive_players(offensive_players, defensive_players, defensive_group):
+
+    for i in range(len(defensive_players)):
+
+        if defensive_players[i] > offensive_players[i]:
+
+            defensive_group.append(defensive_players[i])
+
+
+
+# Step 7: Update positions of successful offensive players
+
+def update_positions(offensive_group, defensive_players):
+
+    for i in range(len(offensive_group)):
+
+        offensive_group[i] += random.uniform(-1, 1) * (defensive_players[i] - offensive_group[i])
+
+
+
+# Termination criterion
+
+def check_termination_criteria(iteration, max_iterations):
+
+    return iteration >= max_iterations
+
+
+
+# Main function
+
+def main(num_players, max_iterations):
+
+    # Step 1: Initialize positions of potential solutions
+
+    offensive_players = initialize_positions(num_players)
+
+    defensive_players = initialize_positions(num_players)
+
+
+
+    # Step 2: Divide players into offensive and defensive groups
+
+    offensive_group = []
+
+    defensive_group = []
+
+
+
+    iteration = 0
+
+    while not check_termination_criteria(iteration, max_iterations):
+
+        # Step 4: Evaluate fitness values for players
+
+        fitness_values = evaluate_fitness(offensive_players, defensive_players)
+
+
+
+        # Step 5: Join successful offensive players to the Successful Offensive Group (SOG)
+
+        join_successful_offensive_players(offensive_players, defensive_players, offensive_group)
+
+
+
+        # Step 6: Join successful defensive players to the Successful Defensive Group (SDG)
+
+        join_successful_defensive_players(offensive_players, defensive_players, defensive_group)
+
+
+
+        # Step 7: Update positions of successful offensive players
+
+        update_positions(offensive_group, defensive_players)
+
+
+
+        iteration += 1
+
+
+
+    # Step 8: Return the player with the best winning state
+
+    best_player = max(offensive_players + defensive_players)
+
+    return best_player
+
+
+
+# Example usage
+
+num_players = 10
+
+max_iterations = 100
+
+
+
+best_player = main(num_players, max_iterations)
+
+print("Best player:", best_player)
