@@ -1,5 +1,5 @@
 import random
-
+import Get_F
 
 
 # Step 1: Initialize positions of potential solutions
@@ -10,7 +10,7 @@ def initialize_positions(num_players):
 
     for _ in range(num_players):
 
-        position = random.uniform(-10, 10)  # Assuming search space is between -10 and 10
+        position = random.uniform(-num_players, num_players) # Assuming search space is between -10 and 10
 
         positions.append(position)
 
@@ -20,29 +20,29 @@ def initialize_positions(num_players):
 
 # Step 3: Move offensive players towards defensive players
 
-def move_offensive_players(offensive_players, defensive_players):
+def move_offensive_players(offensive_players, defensive_players,num_players):
     
     for i in range(len(offensive_players)):
 
-        offensive_players[i] += random.uniform(-10, 10) * (defensive_players[i] - offensive_players[i])
+        offensive_players[i] += random.uniform(-num_players, num_players) * (defensive_players[i] - offensive_players[i])
 
 
 
 # Step 4: Evaluate fitness values for players
          
-def calculate_fitness(offensive_player, defensive_player):
+def calculate_fitness(offensive_player, defensive_player,num_players):
     # Calculate the fitness value based on the offensive and defensive players
     # This would indicate how well the offensive player performed compared to the defensive player
-    fitness_value = random.uniform(-10, 10) # Generate a random fitness value between -10 and 10
+    fitness_value = random.uniform(-num_players, num_players) # Generate a random fitness value between -10 and 10
     return fitness_value     
 
-def evaluate_fitness(offensive_players, defensive_players):
+def evaluate_fitness(offensive_players, defensive_players,num_players):
 
     fitness_values = []
 
     for i in range(len(offensive_players)):
 
-        fitness_value = calculate_fitness(offensive_players[i], defensive_players[i])
+        fitness_value = calculate_fitness(offensive_players[i], defensive_players[i],num_players)
 
         fitness_values.append(fitness_value)
 
@@ -117,7 +117,7 @@ def main(num_players, max_iterations):
 
         # Step 4: Evaluate fitness values for players
 
-        fitness_values = evaluate_fitness(offensive_players, defensive_players)
+        fitness_values = evaluate_fitness(offensive_players, defensive_players,num_players)
 
 
 
@@ -153,12 +153,16 @@ def main(num_players, max_iterations):
 
 # Example usage
 
-num_players = 10
+num_players =80
+print('number of players: ',num_players)
 
 max_iterations = 100
 
+x=[]
+for i in range(1000):
+    best_player = main(num_players, max_iterations)
+    # print("Best player:", best_player)
+    x+= [best_player]
+# print(x)
+print(Get_F.F1(x))
 
-
-best_player = main(num_players, max_iterations)
-
-print("Best player:", best_player)
