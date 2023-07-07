@@ -10,7 +10,7 @@ def initialize_positions(num_players):
 
     for _ in range(num_players):
 
-        position = random.uniform(-1, 1)  # Assuming search space is between -1 and 1
+        position = random.uniform(-10, 10)  # Assuming search space is between -10 and 10
 
         positions.append(position)
 
@@ -21,14 +21,20 @@ def initialize_positions(num_players):
 # Step 3: Move offensive players towards defensive players
 
 def move_offensive_players(offensive_players, defensive_players):
-
+    
     for i in range(len(offensive_players)):
 
-        offensive_players[i] += random.uniform(-1, 1) * (defensive_players[i] - offensive_players[i])
+        offensive_players[i] += random.uniform(-10, 10) * (defensive_players[i] - offensive_players[i])
 
 
 
 # Step 4: Evaluate fitness values for players
+         
+def calculate_fitness(offensive_player, defensive_player):
+    # Calculate the fitness value based on the offensive and defensive players
+    # This would indicate how well the offensive player performed compared to the defensive player
+    fitness_value = random.uniform(-10, 10) # Generate a random fitness value between -10 and 10
+    return fitness_value     
 
 def evaluate_fitness(offensive_players, defensive_players):
 
@@ -71,10 +77,9 @@ def join_successful_defensive_players(offensive_players, defensive_players, defe
 # Step 7: Update positions of successful offensive players
 
 def update_positions(offensive_group, defensive_players):
-
     for i in range(len(offensive_group)):
-
-        offensive_group[i] += random.uniform(-1, 1) * (defensive_players[i] - offensive_group[i])
+        if i < len(defensive_players) and i < len(offensive_group):
+            offensive_group[i] += random.uniform(-10, 10) * (defensive_players[i] - offensive_group[i])
 
 
 
@@ -142,7 +147,7 @@ def main(num_players, max_iterations):
 
     best_player = max(offensive_players + defensive_players)
 
-    return best_player
+    return round(best_player)
 
 
 
