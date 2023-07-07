@@ -164,5 +164,5 @@ for i in range(1000):
     # print("Best player:", best_player)
     x+= [best_player]
 # print(x)
-print(Get_F.F1(x))
+print(Get_F.F2(x))
 
